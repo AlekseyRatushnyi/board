@@ -2,15 +2,11 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.paginator import Paginator
-from .models import Post, Author
-from .forms import SignUpForm, SignInForm, PostForm
+from .models import Post, Comment
+from .forms import SignUpForm, SignInForm, PostForm, CommentForm, FeedBackForm
 from django.contrib.auth import login, authenticate
-from django.http import HttpResponseRedirect
-from .forms import FeedBackForm
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
-from .forms import CommentForm
-from .models import Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
@@ -139,10 +135,13 @@ def create_post(request):
             return HttpResponseRedirect('/')
     return render(request, 'billboard/post_edit.html', {'form': form})
 
-class BaseRegisterView(CreateView):
-    pass
-
-class GetCode(CreateView):
-    pass
-    #
+# def update_post(request,*args, **kwargs):
+#     form = PostForm()
+#     if request.method == 'POST':
+#         form = PostForm(request.POST)
+#         print(form.is_valid())
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/')
+#     return render(request, 'billboard/post_edit.html', {'form': form})
 

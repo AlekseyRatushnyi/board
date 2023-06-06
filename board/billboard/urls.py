@@ -14,5 +14,5 @@ urlpatterns = [
     # path('create/', PostCreate.as_view(), name='post_create'),
     path('create/', views.create_post, name='post_create'),
     path('<slug>/', PostDetailView.as_view(), name='post_detail'),
-    path('code/<str:user>', GetCode.as_view(), name='code'),
+    # path('<slug>/update/', views.update_post, name='update_post'),
 ]
