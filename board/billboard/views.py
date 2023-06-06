@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.paginator import Paginator
-from .models import Post
-from .forms import SignUpForm, SignInForm
+from .models import Post, Author
+from .forms import SignUpForm, SignInForm, PostForm
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from .forms import FeedBackForm
@@ -10,11 +11,12 @@ from django.http import HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from .forms import CommentForm
 from .models import Comment
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
-class MainView(View):
-    def get(self, request, *args, **kwargs):
-        posts = Post.objects.all()
+class MainView(ListView):
+    def get(self, request):
+        posts = Post.objects.all().order_by('-id')
         paginator = Paginator(posts, 6)
 
         page_number = request.GET.get('page')
@@ -25,15 +27,13 @@ class MainView(View):
         })
 
 
-class PostDetailView(View):
+class PostDetailView(DetailView):
     def get(self, request, slug, *args, **kwargs):
         post = get_object_or_404(Post, url=slug)
-        common_tags = Post.tag.most_common()
         last_posts = Post.objects.all().order_by('-id')[:5]
         comment_form = CommentForm()
         return render(request, 'billboard/post_detail.html', context={
             'post': post,
-            'common_tags': common_tags,
             'last_posts': last_posts,
             'comment_form': comment_form
         })
@@ -121,3 +121,28 @@ class SuccessView(View):
         return render(request, 'billboard/success.html', context={
             'title': 'Спасибо'
         })
+
+
+class PostCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'billboard/post_edit.html'
+
+
+def create_post(request):
+    form = PostForm()
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+    return render(request, 'billboard/post_edit.html', {'form': form})
+
+class BaseRegisterView(CreateView):
+    pass
+
+class GetCode(CreateView):
+    pass
+    #
+

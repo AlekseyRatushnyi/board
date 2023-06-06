@@ -3,32 +3,32 @@
 {% block title %}Главная страница моего блога{% endblock %}
 
 {% block header %}
-    {% include './block/slider.html' %}
+
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-      <h1 class="my-3">Последние записи блога</h1>
-      <div class="row">
-        {% for post in page_obj %}
-        <div class="col-md-4">
-          <div class="card mb-4 shadow-sm">
-            <img src="media/{{ post.image }}" alt="" class="card-img-top">
-            <div class="card-body">
-              <h4 class="card-title">{{ post.h1 }}</h4>
-              {{ post.description|safe|truncatechars:100 }}
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a href="{% url 'post_detail' slug=post.url %}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
-                </div>
-                <small class="text-muted">{{ post.created_at }}</small>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mt-4">
+                <ol class="container">
+                  <h1>Последние объявления</h1>
+                </ol>
+                    {% for post in page_obj %}
+
+                          <div class="breadcrumb">
+                              <div class="grid">
+                                  <h4>{{ post.title}}</h4>
+                                  <small class="text-muted">{{ post.created_at }}</small>
+                                  <p>{{ post.text|safe }}</p>
+                                  <a href="{% url 'post_detail' slug=post.url %}" class="btn btn-primary col-3">Обсудить</a>
+                              </div>
+                          </div>
+            </nav>
+
         {% endfor %}
-      </div>
     </div>
+</div>
 {% endblock %}
 
 

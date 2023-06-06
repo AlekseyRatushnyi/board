@@ -46,23 +46,3 @@ footer {
     margin: 0 auto;
 }
 
-.grid {
-    border: 5px solid #d1e231;
-    display: grid;
-}
-
-.grid > *{
-/*фоновый цвет*/
-/*      background-color: #ffbf94; */
-      /*скругление углов*/
-      border-radius: 5px;
-      /*отступ от содержимого до края ячейки*/
-      padding: 7px;
-      /*расстояние от одной границы ячейки до другой*/
-      margin: 1px;
-}
-
-.map{
-    float: left;
-    margin: 5px 5px 5px;
-}

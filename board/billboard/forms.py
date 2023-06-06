@@ -1,7 +1,30 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import Comment
+from .models import Comment, Post, Author
+from django.core.exceptions import ValidationError
+
+class PostForm(forms.ModelForm):
+   class Meta:
+       model = Post
+       fields = ['title', 'url', 'text', 'created_at', 'category', 'author']
+
+
+# class PostForm(forms.ModelForm):
+#     author = Author.objects.all().values('user__username')
+#
+#     class Meta:
+#         model = Post
+#         fields = ['title', 'url', 'text', 'image', 'created_at', 'category', 'author']
+#
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         title = cleaned_data.get("title")
+#         text = cleaned_data.get("text")
+#         if title == text:
+#             raise ValidationError("Описание не должно быть идентично названию.")
+#         return cleaned_data
+
 
 
 class SignUpForm(forms.Form):
@@ -111,3 +134,5 @@ class CommentForm(forms.ModelForm):
                 'rows': 3
             }),
         }
+
+

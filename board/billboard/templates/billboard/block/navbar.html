@@ -2,9 +2,7 @@
   <a href="#" class="navbar-brand">
     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" width="30" height="30" alt="logo">
   </a>
-  <a href="#" class="navbar-brand">
-    <img src="https://nuxtjs.org/logos/nuxt-square-white.svg" width="30" height="30" alt="logo">
-  </a>
+
   <button class="navbar-toggler" type="button" data-toggle="collapse"
           data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,20 +13,21 @@
       <li class="nav-item active">
         <a href="{% url 'index' %}" class="nav-link">Главная</a>
       </li>
-        <li class="nav-item ">
-           <a href="{% url 'contact' %}" class="nav-link">Контакты</a>
-        </li>
+<!--        <li class="nav-item ">-->
+<!--           <a href="{% url 'contact' %}" class="nav-link">Контакты</a>-->
+<!--        </li>-->
     </ul>
-    <form action="" class="form-inline my-2 my-lg-0">
-      <input type="text" class="form-control mr-sm-2" placeholder="Поиск" aria-label="Поиск">
-      <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Поиск</button>
-    </form>
+<!--    <form action="" class="form-inline my-2 my-lg-0">-->
+<!--      <input type="text" class="form-control mr-sm-2" placeholder="Поиск" aria-label="Поиск">-->
+<!--      <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Поиск</button>-->
+<!--    </form>-->
     {% if user.is_authenticated %}
-    <span class="navbar-text mr-2">{{ user }}</span>
+    <span class="navbar-text mr-2">Вы зашли как: {{ user }}</span>
     <a href="{% url 'signout' %}" class="btn btn-outline-light">Выход</a>
+    <a href="{% url 'post_create' %}" class="btn btn-success">Создать объявление</a>
     {% else %}
-    <a href="{% url 'signin' %}" class="btn btn-outline-light mr-2">Вход</a>
-    <a href="{% url 'signup' %}" class="btn btn-outline-light mr-2">Регистрация</a>
+    <a href="{% url 'account_login' %}" class="btn btn-outline-light mr-2">Вход</a>
+    <a href="{% url 'account_signup' %}" class="btn btn-outline-light mr-2">Регистрация</a>
     {% endif %}
   </div>
 </nav>
