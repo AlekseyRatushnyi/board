@@ -25,6 +25,7 @@
     <span class="navbar-text mr-2">Вы зашли как: {{ user }}</span>
     <a href="{% url 'signout' %}" class="btn btn-outline-light">Выход</a>
     <a href="{% url 'post_create' %}" class="btn btn-success">Создать объявление</a>
+    <a href="{% url 'private_post_detail' %}" class="btn btn-outline-light">Страница пользователя</a>
     {% else %}
     <a href="{% url 'account_login' %}" class="btn btn-outline-light mr-2">Вход</a>
     <a href="{% url 'account_signup' %}" class="btn btn-outline-light mr-2">Регистрация</a>

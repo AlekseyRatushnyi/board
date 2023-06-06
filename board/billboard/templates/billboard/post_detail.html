@@ -14,9 +14,11 @@
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
                   <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
+                  <li class="breadcrumb-item active" aria-current="page">{% for category in post.category.all %} {{ category}} {% endfor %}</li>
                 </ol>
             </nav>
             <img class="img-fluid rounded " src="{{ post.image.url }}" alt="">
+
             <hr>
             <p class="lead">
             {{ post.text|safe }}

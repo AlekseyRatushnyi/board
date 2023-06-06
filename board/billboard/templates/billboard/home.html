@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 {% load static %}
-{% block title %}Главная страница моего блога{% endblock %}
+{% block title %}Главная страница{% endblock %}
 
 {% block header %}
 
@@ -19,9 +19,19 @@
                           <div class="breadcrumb">
                               <div class="grid">
                                   <h4>{{ post.title}}</h4>
-                                  <small class="text-muted">{{ post.created_at }}</small>
+                                  {% for category in post.category.all %}
+                                  <h5>Категория: {{ category}}</h5>
+                                  {% endfor %}
+                                  <small class="text-muted">Создано: {{ post.created_at }}</small>
+                                  <small class="text-muted">Автор: {{ post.author }}</small>
+                                  {% if user == post.author %}
+                                  <div class="nav-item active">
+                                    <a href="{{ post.pk }}/update" class="btn btn-outline-info">Корректировать объявление</a>
+                                    <a href="{{ post.pk }}/delete" class="btn btn-outline-warning">Удалить объявление</a>
+                                  </div>
+                                  {% endif %}
                                   <p>{{ post.text|safe }}</p>
-                                  <a href="{% url 'post_detail' slug=post.url %}" class="btn btn-primary col-3">Обсудить</a>
+                                  <a href="{% url 'post_detail' post.id %}" class="btn btn-primary col-3">Обсудить</a>
                               </div>
                           </div>
             </nav>

@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.core.paginator import Paginator
 from .models import Post, Comment
@@ -12,7 +12,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 class MainView(ListView):
     def get(self, request):
-        posts = Post.objects.all().order_by('-id')
+        posts = Post.objects.all().order_by('-id')[:5]
         paginator = Paginator(posts, 6)
 
         page_number = request.GET.get('page')
@@ -24,9 +24,9 @@ class MainView(ListView):
 
 
 class PostDetailView(DetailView):
-    def get(self, request, slug, *args, **kwargs):
-        post = get_object_or_404(Post, url=slug)
-        last_posts = Post.objects.all().order_by('-id')[:5]
+    def get(self, request, *args, **kwargs):
+        post = Post.objects.get(pk=kwargs['pk'])
+        last_posts = Post.objects.all().order_by('-id')
         comment_form = CommentForm()
         return render(request, 'billboard/post_detail.html', context={
             'post': post,
@@ -34,12 +34,12 @@ class PostDetailView(DetailView):
             'comment_form': comment_form
         })
 
-    def post(self, request, slug, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             text = request.POST['text']
             username = self.request.user
-            post = get_object_or_404(Post, url=slug)
+            post = get_object_or_404(Post, pk=kwargs['pk'])
             comment = Comment.objects.create(post=post, username=username, text=text)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return render(request, 'billboard/post_detail.html', context={
@@ -125,23 +125,27 @@ class PostCreate(CreateView):
     template_name = 'billboard/post_edit.html'
 
 
-def create_post(request):
-    form = PostForm()
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        print(form.is_valid())
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/')
-    return render(request, 'billboard/post_edit.html', {'form': form})
+class PostUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'billboard/post_edit.html'
 
-# def update_post(request,*args, **kwargs):
-#     form = PostForm()
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         print(form.is_valid())
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect('/')
-#     return render(request, 'billboard/post_edit.html', {'form': form})
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'billboard/post_delete.html'
+    success_url = reverse_lazy("index")
+
+
+class PrivateView(ListView):
+    form_class = PostForm
+    model = Post
+    template_name = 'billboard/private_post_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        post = Post.objects.filter(author=user)
+        return render(request, 'billboard/private_post_detail.html', context={
+             'page_obj': post
+        })
 
